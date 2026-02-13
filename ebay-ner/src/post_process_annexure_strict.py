@@ -250,11 +250,11 @@ def main():
     args = ap.parse_args()
 
     kept, dropped, bad = process_file(args.input, args.output, beta=args.beta)
-    print(f"✅ Wrote {kept} cleaned rows → {args.output}")
+    print(f" Wrote {kept} cleaned rows → {args.output}")
     if dropped:
-        print(f"ℹ️ Dropped {dropped} rows (O-tag, disallowed, or invalid after normalization).", file=sys.stderr)
+        print(f" Dropped {dropped} rows (O-tag, disallowed, or invalid after normalization).", file=sys.stderr)
     if bad:
-        print(f"⚠️ Skipped {bad} malformed lines.", file=sys.stderr)
+        print(f" Skipped {bad} malformed lines.", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
