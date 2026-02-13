@@ -1,0 +1,36 @@
+model:
+  type: flair
+  embeddings:
+    - xlm-roberta-large        # use a powerful multilingual transformer (large) for German
+    - flair:de-forward         # contextual string embeddings (forward LM)
+    - flair:de-backward        # contextual string embeddings (backward LM)
+  use_crf: true
+  use_rnn: false
+  fine_tune: true              # enable transformer fine-tuning for best performance:contentReference[oaicite:8]{index=8}
+  # (Note: TransformerWordEmbeddings will use only top layer when fine_tune=True)
+  # use_context can be set to true if documents have multiple sentences for higher accuracy:contentReference[oaicite:9]{index=9}
+  use_context: true            
+
+trainer:
+  max_epochs: 15               # allow up to 15 epochs (OneCycleLR schedule will be based on this)
+  patience: 3                  # early stopping after 3 epochs of no dev F1 improvement
+  learning_rate: 5e-5          # initial learning rate (Optuna will tune this)
+  mini_batch_size: 16          # initial batch size (Optuna will tune this)
+  mini_batch_chunk_size: 8     # chunk size to avoid memory issues with large batches
+  gradient_accumulation_steps: 2   # accumulate gradients to simulate larger batch
+  monitor: "micro_F1_score"    # optimize micro-averaged F1 on the dev set
+  embeddings_storage_mode: "gpu"   # store embeddings on GPU for efficiency (use "cpu" if no GPU)
+  # Optimizer and scheduler will be set in the training script (AdamW + OneCycleLR)
+
+data:
+  corpus_dir: "src/corpus_bioes"    # path to data files in BIOES format
+  train_file: "train_tab.txt"       # training set file
+  dev_file: "dev_tab.txt"           # development/validation set file
+  test_file: "test_tab.txt"         # test set file (with labels if available)
+  label_type: "ner"                 # target label type
+  label_dictionary: "resources/taggers/ner_tags.pkl"  # (optional) pre-saved label dict
+  language: "de"                    # language (German)
+
+output:
+  output_dir: "data/outputs/flair-de-ner/bayesian_search/"  # base directory for outputs
+  log_file: "data/outputs/flair-de-ner/bayesian_search/train.log"

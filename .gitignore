@@ -1,0 +1,36 @@
+# Virtual environments
+.venv/
+.venv*/
+venv/
+env/
+
+# Data and model artifacts (DO NOT PUSH)
+ebay-ner/data/
+data/
+*.pt
+*.bin
+*.ckpt
+optuna_study.db
+
+# Python cache
+__pycache__/
+*.pyc
+.DS_Store
+
+# Logs
+*.log
+
+# Large raw files
+*.gz
+*.pdf
+*.tsv
+
+# Prediction outputs
+*_predictions*.tsv
+final_submission.tsv
+
+# Zip files
+*.zip
+
+# macOS
+.DS_Store

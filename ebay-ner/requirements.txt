@@ -1,0 +1,45 @@
+# Core data handling
+pandas==2.2.2
+numpy==1.26.4
+
+# File handling
+python-dotenv==1.0.1
+tqdm==4.66.4
+joblib==1.4.2
+
+# Text preprocessing
+regex==2024.5.15
+
+# Token classification model
+transformers==4.41.2
+datasets==2.19.1
+sentencepiece==0.2.0
+
+# Flair framework for sequence tagging
+flair==0.13.1
+torch==2.1.0
+torchvision==0.16.0
+torchaudio==2.1.0
+torchcrf==1.1.0
+
+# Ensure macOS compatibility (for Apple Silicon, if applicable)
+# If you're on M1/M2, use `pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cpu` to avoid GPU issues
+
+# Evaluation metrics
+scikit-learn==1.5.0
+
+# Compression & encoding
+unidecode==1.3.8
+python-magic==0.4.27
+
+# Logging & debugging
+loguru==0.7.2
+
+# YAML config parsing
+pyyaml==6.0.1
+
+# Export TSV files safely
+csvkit==1.3.0
+
+# Submission format checking
+chardet==5.2.0

@@ -110,17 +110,45 @@ python src/post_process_predictions_recall_tuned.py \
 
 ```
 ebay-ner/
-├── config/           # YAML configurations
-├── src/              # 25 Python modules
-│   ├── preprocess_*  # Data preprocessing
-│   ├── convert_*     # Format conversion
-│   ├── train_*.py    # Training + HPO
-│   ├── predict.py    # Inference
-│   └── post_process* # Output normalization
+├── config/
+│   ├── training_config.yaml      # Model + trainer + data config
+│   ├── inference_config.yaml     # Inference settings
+│   └── eval_config.yaml          # Evaluation settings
+│
+├── src/                          # 25 Python modules
+│   ├── preprocess_train_val.py   # Raw TSV → BIO JSON + train/val split
+│   ├── preprocess_quiz.py        # Quiz data normalization
+│   ├── convert_biojson_to_flair.py
+│   ├── convert_bio_to_bioes.py   # BIO → BIOES tagging
+│   ├── convert_space_to_tab.py   # Format for Flair ColumnCorpus
+│   ├── train_model.py            # Training + Optuna HPO
+│   ├── binary_search.py          # Bayesian HPO continuation
+│   ├── predict.py                # Inference with thresholding
+│   ├── post_process_predictions_recall_tuned.py
+│   ├── allowed_by_category.py    # Category-aspect gating rules
+│   ├── dataset_utils.py          # PyTorch Dataset for transformers
+│   └── model_utils.py            # BERT tagger definition
+│
 ├── data/
-│   ├── corpus_bioes/ # Training corpus
-│   └── outputs/      # Trained models
+│   ├── raw/                      # Original gzipped TSV input
+│   ├── processed/                # BIO JSON (train.bio.json, val.bio.json)
+│   ├── corpus/                   # Space-separated Flair format
+│   ├── corpus_bioes/             # Tab-separated BIOES (final training input)
+│   ├── outputs/                  # Trained models + Optuna trials
+│   ├── predictions/              # Raw model outputs
+│   └── submissions/              # Post-processed final outputs
+│
+├── scripts/                      # Shell scripts for pipeline orchestration
+├── all_tags.txt                  # Complete NER tag inventory (48 tags)
+├── optuna_study.db               # Persistent HPO trial storage
 └── requirements.txt
+```
+
+**Data flow through directories:**
+```
+data/raw/ → data/processed/ → data/corpus/ → data/corpus_bioes/ → data/outputs/
+                                                                        ↓
+                                              data/submissions/ ← data/predictions/
 ```
 
 ## Future Work

@@ -1,0 +1,35 @@
+model:
+  type: flair
+  name: xlmr-doc-de-03
+  embeddings: "xlm-roberta-large"
+  use_crf: true
+  use_rnn: false
+  word_dropout: 0.05
+  locked_dropout: 0.5
+  fine_tune: true
+
+trainer:
+  max_epochs: 10
+  gpus: 1
+  learning_rate: 5e-6
+  mini_batch_size: 4
+  mini_batch_chunk_size: 2
+  gradient_accumulation_steps: 4
+  patience: 3
+  monitor: "macro_F1_score"
+  embeddings_storage_mode: "none"
+  checkpoint: true
+  save_final_model: true
+
+data:
+  train_file: "data/processed/train.txt"
+  dev_file: "data/processed/dev.txt"
+  test_file: null
+  data_format: "column"
+  label_type: "ner"
+  label_dictionary: "resources/taggers/ner_tags.pkl"
+  language: "de"
+
+output:
+  output_dir: "data/outputs/xlmr-doc-de-03/"
+  log_file: "data/outputs/xlmr-doc-de-03/train.log"
