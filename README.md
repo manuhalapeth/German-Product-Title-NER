@@ -6,7 +6,7 @@ A production-grade Named Entity Recognition system for extracting structured pro
 
 Extracts 29 product attributes from German product titles: manufacturer info, vehicle compatibility, technical specs, and product identifiers. Combines multilingual transformer embeddings with contextual language models and CRF-based sequence labeling.
 
-## Architecture
+## Architecture (Check ARCHITECTURE.MD for more context) 
 
 ```
 Input Title → Tokenization → Stacked Embeddings → CRF Sequence Tagger → Post-Processing → Structured Output
@@ -60,7 +60,7 @@ Input Title → Tokenization → Stacked Embeddings → CRF Sequence Tagger → 
 ## Design Tradeoffs
 
 **Why CRF sequence labeling?**
-Product titles have strong sequential dependencies. A token labeled as a vehicle brand strongly predicts the next token is a model name. CRF captures these constraints at the sequence level rather than making independent per-token decisions. This matters more than raw accuracy—it produces coherent entity spans.
+Product titles have strong sequential dependencies. A token labeled as a vehicle brand strongly predicts the next token is a model name. CRF captures these constraints at the sequence level rather than making independent per-token decisions. This matters more than raw accuracy since it produces coherent entity spans.
 
 **Why per-aspect confidence thresholds?**
 A single global threshold fails because aspects have different base rates and model confidence distributions. Manufacturer names are high-confidence, while technical specs often have lower scores due to ambiguity. Tuning thresholds per aspect (0.40-0.45) lets us optimize precision/recall independently for each attribute type.
