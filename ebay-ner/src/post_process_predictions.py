@@ -95,9 +95,9 @@ def process_file(input_path, output_path):
                     out.write(f"{rid}\t{cid}\t{aspect}\t{v}\n")
                     kept += 1
 
-    print(f"✅ Wrote {kept} cleaned rows → {output_path}")
-    print(f"ℹ️ Dropped {dropped} invalid or empty values")
-    print(f"⚠️ Skipped {malformed} malformed lines (if any)")
+    print(f" Wrote {kept} cleaned rows → {output_path}")
+    print(f" Dropped {dropped} invalid or empty values")
+    print(f" Skipped {malformed} malformed lines (if any)")
 
 # ===========================================================
 # 5. CLI entrypoint
