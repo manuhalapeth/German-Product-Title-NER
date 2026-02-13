@@ -13,7 +13,7 @@ try:
     from allowed_by_category import is_allowed  # user-provided helper
 except Exception:
     def is_allowed(aspect: str, cat_id: int) -> bool:
-        # Fallback: allow everything (you can tighten below if desired)
+        # Fallback: allow everything 
         return True
 
 # -----------------------------
@@ -23,7 +23,7 @@ MIN_LEN = 2
 MAX_LEN = 80
 # Aggressive duplicate suppression helps precision; keep high but not perfect to allow minor variants
 FUZZY_SIM_THRESHOLD = 0.94
-# Fβ focus (β>=1 favors recall; we’ll use β=2 by default for safety)
+# Fβ focus (β>=1 favors recall; use β=2 by default for safety)
 DEFAULT_BETA = 2.0
 
 # Common connectors and pure “O-like” tokens (don’t output as aspect values)
@@ -74,7 +74,7 @@ def is_oish_token(v: str) -> bool:
     return w in _OISH or (len(w) <= 2 and w in {"+", "-", "/", "x"})
 
 def guard_value_charset(v: str) -> bool:
-    # Be permissive; only drop truly weird garbage
+    # Be permissive; only drop truly weird things?
     return bool(RE_VALUE_OK.match(v))
 
 def clamp_len(v: str) -> bool:
@@ -191,7 +191,7 @@ def process_file(input_path: str, output_path: str, beta: float = DEFAULT_BETA) 
     dropped = 0
     total = 0
 
-    # We avoid pandas to honor “no csv-style quoting” requirement in the output and full control here.
+    # done to avoid pandas to honor “no csv-style quoting” requirement in the output and full control here.
     with open(input_path, "r", encoding="utf-8", newline="") as f:
         for ln, raw in enumerate(f, 1):
             parts = raw.rstrip("\n").split("\t")
@@ -250,11 +250,11 @@ def main():
     args = ap.parse_args()
 
     kept, dropped, bad = process_file(args.input, args.output, beta=args.beta)
-    print(f"✅ Wrote {kept} cleaned rows → {args.output}")
+    print(f" Wrote {kept} cleaned rows → {args.output}")
     if dropped:
         print(f"ℹ️ Dropped {dropped} rows (O-tag, disallowed, or invalid after normalization).", file=sys.stderr)
     if bad:
-        print(f"⚠️ Skipped {bad} malformed lines.", file=sys.stderr)
+        print(f" Skipped {bad} malformed lines.", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
