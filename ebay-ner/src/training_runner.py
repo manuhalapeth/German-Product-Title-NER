@@ -18,7 +18,7 @@ import os
 import shutil
 
 # ===========================
-# 1️⃣ Training Function
+#  Training Function
 # ===========================
 
 def run_training(config, trial):
