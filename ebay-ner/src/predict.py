@@ -10,13 +10,13 @@ from allowed_by_category import is_allowed
 # 1. MODEL CONFIGURATION
 # ===========================================================
 tagger_paths = [
-    # Only your strongest model (F1 ≈ 0.90)
+    # Only my strongest model (F1 ≈ 0.90)
     "/Users/manuhalapeth/Downloads/eBay_ML_Challenge_2025/"
     "ebay-ner/data/outputs/flair-de-ner/bayesian_search/trial_0/trial_1/final-model.pt"
 ]
 
 taggers = [SequenceTagger.load(path) for path in tagger_paths]
-print(f"✅ Loaded {len(taggers)} model(s).")
+print(f" Loaded {len(taggers)} model(s).")
 
 # ===========================================================
 # 2. LOAD QUIZ DATA
@@ -87,4 +87,4 @@ with open(output_file, "w", encoding="utf-8") as out:
         for aspect_name, aspect_value in predicted_spans:
             out.write(f"{record_id}\t{category_id}\t{aspect_name}\t{aspect_value}\n")
 
-print(f"\n✅ Predictions written to {output_file}")
+print(f"\n Predictions written to {output_file}")
