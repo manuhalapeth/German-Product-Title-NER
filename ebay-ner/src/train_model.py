@@ -1,3 +1,16 @@
+"""
+Flair NER Training Pipeline with Optuna Hyperparameter Tuning
+
+This script trains a Flair SequenceTagger model for sequence labeling
+(NER) using a configurable YAML file. It supports:
+
+- ColumnCorpus loading
+- Transformer + Flair + Character embeddings
+- CRF / RNN configuration
+- Optuna hyperparameter tuning
+- Final retraining with best parameters
+
+"""
 import os
 import sys
 import yaml
@@ -18,12 +31,37 @@ from flair.trainers import ModelTrainer
 
 
 def load_config(path: str) -> dict:
+    """
+    Load YAML configuration file.
+
+    Args:
+        path (str): Path to YAML config file.
+
+    Returns:
+        dict: Parsed configuration dictionary.
+    """
     with open(path, "r") as f:
         return yaml.safe_load(f)
 
 
 def train_model(config: dict) -> float:
-    """Train a Flair SequenceTagger safely on Flair 0.15.1 and return best dev F1."""
+    """
+    Train a Flair SequenceTagger model and return best dev F1 score.
+
+    Steps:
+        1. Load corpus from ColumnCorpus
+        2. Build label dictionary
+        3. Construct embeddings stack
+        4. Initialize SequenceTagger
+        5. Train model
+        6. Extract best dev F1
+
+    Args:
+        config (dict): Configuration dictionary.
+
+    Returns:
+        float: Best development F1 score achieved.
+    """
     # --- Load corpus ---
     corpus_dir = config["data"]["corpus_dir"]
     column_format = {0: "text", 1: config["data"]["label_type"]}
@@ -95,14 +133,14 @@ def train_model(config: dict) -> float:
     elif "dev_score" in trainer_result:
         best_f1 = max(trainer_result["dev_score"]) if isinstance(trainer_result["dev_score"], list) else trainer_result["dev_score"]
 
-    print(f"✅ Training done. Best dev F1 = {best_f1:.4f}")
+    print(f" Training done. Best dev F1 = {best_f1:.4f}")
     return best_f1
 
 
 def main():
     cfg_path = "config/training_config.yaml"
     if not os.path.isfile(cfg_path):
-        print(f"❌ Config not found: {cfg_path}", file=sys.stderr)
+        print(f" Config not found: {cfg_path}", file=sys.stderr)
         sys.exit(1)
 
     config = load_config(cfg_path)
@@ -136,10 +174,10 @@ def main():
 
     print("🔍 Starting hyperparameter tuning ...")
     study.optimize(objective, n_trials=25)
-    print(f"🏆 Best params: {study.best_trial.params}")
-    print(f"🏆 Best dev F1: {study.best_value:.4f}")
+    print(f" Best params: {study.best_trial.params}")
+    print(f" Best dev F1: {study.best_value:.4f}")
 
-    # --- Final model ---
+    # --- Final model training ---
     best = study.best_trial.params
     config["trainer"]["learning_rate"] = best.get("learning_rate", config["trainer"]["learning_rate"])
     config["trainer"]["mini_batch_size"] = best.get("mini_batch_size", config["trainer"]["mini_batch_size"])
@@ -150,10 +188,10 @@ def main():
     final_dir.mkdir(parents=True, exist_ok=True)
     config["output"]["output_dir"] = str(final_dir)
 
-    print("🚀 Retraining final model with best params ...")
+    print(" Retraining final model with best params ...")
     final_score = train_model(config)
-    print(f"✅ Final model complete → Best F1 = {final_score:.4f}")
-    print(f"📁 Models saved to {config['output']['output_dir']}")
+    print(f" Final model complete → Best F1 = {final_score:.4f}")
+    print(f" Models saved to {config['output']['output_dir']}")
 
 
 if __name__ == "__main__":
