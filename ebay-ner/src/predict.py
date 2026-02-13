@@ -23,7 +23,7 @@ print(f" Loaded {len(taggers)} model(s).")
 # ===========================================================
 with open("data/processed/quiz_tokenized.json", "r", encoding="utf-8") as f:
     records = json.load(f)
-print(f"✅ Loaded {len(records)} quiz records.")
+print(f" Loaded {len(records)} quiz records.")
 
 # ===========================================================
 # 3. ASPECT-SPECIFIC CONFIDENCE THRESHOLDS
@@ -76,7 +76,7 @@ def predict_weighted(title, category_id, taggers):
 # ===========================================================
 output_file = "Fifth_quiz_predictions_trial1.tsv"
 
-print("\n🚀 Running predictions...")
+print("\n Running predictions...")
 with open(output_file, "w", encoding="utf-8") as out:
     for record in tqdm(records, desc="Tagging Quiz Data"):
         record_id = record["record_id"]
