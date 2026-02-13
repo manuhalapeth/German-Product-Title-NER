@@ -2,7 +2,7 @@ from transformers import AutoTokenizer
 # Initialize the tokenizer from the XLM-RoBERTa large model
 tokenizer = AutoTokenizer.from_pretrained("xlm-roberta-large")
 
-print("🔍 Checking for token → subtoken splits...\n")
+print(" Checking for token → subtoken splits...\n")
 # Counters to track how many tokens are split into multiple subtokens
 split_count = 0
 total = 0
